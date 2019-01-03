@@ -1,7 +1,10 @@
 const express = require("express");
 const User = require("../DB Modals/User");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const keys = require("../config/keys");
+const passport = require("passport");
 const router = express.Router();
 
 router.get("/test", (req, res) => res.json({ login: "required" }));
@@ -38,7 +41,7 @@ router.post("/register", async (req, res) => {
 // access  Public
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  let user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
   // checks for user in database
   if (!user) {
@@ -47,10 +50,30 @@ router.post("/login", async (req, res) => {
   //  compare password typed to the DB
   const isMatch = await bcrypt.compare(password, user.password);
   if (isMatch) {
-    res.json({ msg: "logged in" });
+    // user found
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    };
+    jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+      res.json({ success: true, token: "Bearer " + token });
+    });
   } else {
     return res.status(404).json({ msg: "password incorrect" });
   }
 });
 
+// route    api/users/active
+// method  get
+// access  private
+
+router.get(
+  "/active",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    // resp with the user data after bein auth
+    res.json({ id: req.user.id, name: req.user.name, email: req.user.email });
+  }
+);
 module.exports = router;
