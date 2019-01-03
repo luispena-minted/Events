@@ -5,6 +5,7 @@ const userAuth = require("./routes/userAuth");
 const profileInfo = require("./routes/profileInfo");
 const DB = require("./config/keys").mongoURI;
 const path = require("path");
+const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 
 //Connecting to mongoDB
@@ -18,6 +19,7 @@ mongoose
 
 //  use of middleweres
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.send("Hello World"));
 
