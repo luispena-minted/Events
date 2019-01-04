@@ -7,7 +7,7 @@ const keys = require("../config/keys");
 const passport = require("passport");
 const router = express.Router();
 
-router.get("/test", (req, res) => res.json({ login: "required" }));
+router.get("/test", (req, res) => res.send({ login: "required" }));
 
 // route    api/users/register
 // method  POST
@@ -67,7 +67,6 @@ router.post("/login", async (req, res) => {
 // route    api/users/active
 // method  get
 // access  private
-
 router.get(
   "/active",
   passport.authenticate("jwt", { session: false }),

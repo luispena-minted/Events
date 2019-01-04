@@ -4,8 +4,8 @@ const userAuth = require("./routes/userAuth");
 const profileInfo = require("./routes/profileInfo");
 const DB = require("./config/keys").mongoURI;
 const path = require("path");
-const bodyParser = require("body-parser");
 const passport = require("passport");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -18,9 +18,9 @@ mongoose
   .then(() => console.log("DataBase Connected"))
   .catch(err => console.error(err));
 
-//  use of middleweres
+//  use of middlewares
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => res.send("Hello World"));
 app.use(passport.initialize());
 
