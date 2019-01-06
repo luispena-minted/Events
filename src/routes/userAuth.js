@@ -64,15 +64,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// route    api/users/active
-// method  get
-// access  private
-router.get(
-  "/active",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    // resp with the user data after bein auth
-    res.json({ id: req.user.id, name: req.user.name, email: req.user.email });
-  }
-);
 module.exports = router;

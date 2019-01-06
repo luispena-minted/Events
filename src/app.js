@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const userAuth = require("./routes/userAuth");
-const profileInfo = require("./routes/profileInfo");
+const eventInfo = require("./routes/eventInfo");
 const DB = require("./config/keys").mongoURI;
 const path = require("path");
 const passport = require("passport");
@@ -29,7 +29,7 @@ require("./config/passportConfig")(passport);
 
 // routes
 app.use("/api/users", userAuth);
-app.use("/api/profile", profileInfo);
+app.use("/api/profile", eventInfo);
 
 // initialize server
 app.listen(port, () => console.log(`Server Running in port ${port}`));
