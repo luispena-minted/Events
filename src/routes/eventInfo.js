@@ -36,7 +36,7 @@ router.get(
 // method  post / update
 // access  private
 router.post(
-  "/active",
+  "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const date = await new Date();
