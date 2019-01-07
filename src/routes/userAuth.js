@@ -15,10 +15,7 @@ router.get("/test", (req, res) => res.send({ login: "required" }));
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
-  if (user) {
-    // user found in database
-    res.status(400).json({ msg: "User already exist" });
-  } else {
+  if (!user) {
     // creating new User
     const newUser = new User({
       name,
@@ -33,6 +30,9 @@ router.post("/register", async (req, res) => {
         return res.status(200).json({ msg: "user Created" });
       });
     });
+  } else {
+    // user found in database
+    return res.status(400).json({ msg: "User already exist" });
   }
 });
 
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
 
   // checks for user in database
   if (!user) {
-    return res.status(404).json({ msg: "user not found" });
+    return res.status(404).json({ msg: "username or password incorrect" });
   }
   //  compare password typed to the DB
   const isMatch = await bcrypt.compare(password, user.password);
@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
       res.json({ success: true, token: "Bearer " + token });
     });
   } else {
-    return res.status(404).json({ msg: "password incorrect" });
+    return res.status(404).json({ msg: "username or password incorrect" });
   }
 });
 
